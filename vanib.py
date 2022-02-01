@@ -35,6 +35,7 @@ def step():
             nc += 1
             continue
         c = m.check()
+        #print(c)
         if not c:
             nc += 1
             continue
@@ -93,41 +94,48 @@ class Decal():
         self.state = 0
         self.color = color
         
+        self.offset = [grid.CELL / 2, grid.CELL / 2]
         self.check()
         
-        self.offset = [0, 0]
         if self.type == 0:
             if not self.bind is None:
-                self.offset[0] = self.pos[0] - vania.rooms[self.bind].pos[0]
-                self.offset[1] = self.pos[1] - vania.rooms[self.bind].pos[1]
-            self.offset[0] += grid.CELL / 2
-            self.offset[1] += grid.CELL / 2
+                self.offset[0] += self.pos[0] - vania.rooms[self.bind].pos[0]
+                self.offset[1] += self.pos[1] - vania.rooms[self.bind].pos[1]
     
     def check(self):
+        #print("check")
         c = None
         if not self.bind is None:
             if self.type == 0:
                 if self.bind < len(vania.rooms):
                     c = vania.rooms[self.bind]
-                else: return False
+                else:
+                    #print("nbn,0,b>")
+                    return False
             else:
                 if self.bind < len(vania.links):
                     c = vania.links[self.bind]
                     if c.state == 2:
                         deleteDecal(self.id, self.tid)
                         c = None
-                else: return False
+                else:
+                    #print("nbn,1,b>")
+                    return False
             if c is None: deleteDecal(self.id, self.tid)
+            #print("c")
             return not c is None
         else:
             if self.type == 0:
-                r = vania.roomAt(self.pos)
+                r = vania.roomAt((self.pos[0] + self.offset[0], self.pos[1] + self.offset[1]))
                 if not r is None:
                     deleteDecal(self.id, self.tid)
+                    #print("bn,0,nrn")
                     return False
             if self.type == 1:
                 deleteDecal(self.id, self.tid)
+                #print("bn,1")
                 return False
+            #print("bn")
             return True
     
     def getCell(self):
@@ -195,15 +203,15 @@ class Mark(Decal):
         self.type = 0
         self.bind = bind
         
+        #print(self.pos, self.type, self.bind)        
+        
         self.sign = 0 if start == 1 else len(SIGNS) - 1
         self.state = -1
         
-        self.offset = [0, 0]
+        self.offset = [grid.CELL / 2, grid.CELL / 2]
         if not bind is None:
-            self.offset[0] = self.pos[0] - vania.rooms[self.bind].pos[0]
-            self.offset[1] = self.pos[1] - vania.rooms[self.bind].pos[1]
-        self.offset[0] += grid.CELL / 2
-        self.offset[1] += grid.CELL / 2
+            self.offset[0] += self.pos[0] - vania.rooms[self.bind].pos[0]
+            self.offset[1] += self.pos[1] - vania.rooms[self.bind].pos[1]
     
     def advance(self, dir):
         self.sign += dir

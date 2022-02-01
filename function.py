@@ -95,9 +95,11 @@ def addDecal():
 def addMark(dir):
     cell = gridfunc.snap_to_grid(grid.tmouse)
     r = vania.roomAt(grid.tmouse)
+    #print(r)
     id = None
     if not r is None: id = r.id 
     d = vanib.decalAt((cell, 0))
+    #print(d)
     if d is None: vanib.Mark(cell, id, dir)
     elif d.tid == 1: d.advance(dir)
         
