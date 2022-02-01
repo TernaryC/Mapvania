@@ -317,6 +317,7 @@ class Room():
             self.drawHover()
         
     def drawSelf(self, x, y):
+        rectMode(CORNER)
         rect(x + 5, y + 5, self.size[0] - 10, self.size[1] - 10)
         
     def drawHover(self):

@@ -5,6 +5,9 @@ import vanib
 
 acceptInput = True
 mouseDown = False
+shift = False
+ctrl  = False
+alt   = False
 
 tool = 0
 decal = 0
@@ -24,7 +27,7 @@ def posin(pos0, pos1, s):
     return within(pos0[0], pos0[1], pos1[0], pos1[1], pos1[0] + s[0], pos1[1] + s[1])
 
 def checkTool(c):
-    l = ["BRUSH", "LINK", "PAINT", "MOVE", "DELETE", "PAN", "MARK"]
+    l = ["BRUSH", "LINK", "PAINT", "MOVE", "DELETE", "PAN", "MARK", "DEBUG"]
     if type(c) is not tuple:
         return tool == l.index(c)
     else: return any(tool == l.index(x) for x in c)
@@ -69,7 +72,9 @@ def addLink():
     r = vania.roomAt(grid.tmouse)
     o = vania.posInRoom(grid.tmouse, r)
     if o == 0:
-        vania.Link(cell, edge)
+        l = vania.Link(cell, edge)
+        if shift and not ctrl: l.state = 1
+        if not shift and ctrl: l.state = 2
         
 def addDecal():
     snap = list(gridfunc.snap_to_all(grid.tmouse))
@@ -86,19 +91,31 @@ def addDecal():
             snap[0] = gridfunc.snap_to_grid(grid.tmouse)
             snap[1] = 0
     d = vanib.decalAt(snap)
-    if d is None: vanib.Decal(snap, id, color=decal)
+    if d is None:
+        dec = vanib.Decal(snap, id, color=decal)
+        if snap[1] == 0 and shift: dec.state = 1
     elif d.tid == 0:
         if d.color == decal:
-            if d.type == d.state == 0: d.state = 1
+            if d.type == 0:    
+                if not shift and d.state == 0: d.state = 1
+                elif   shift and d.state == 1: d.state = 0
+                else: vanib.deleteDecal(d.id)
             else: vanib.deleteDecal(d.id)
         else: d.color = decal
     else:
-        if d.highlight == -1: d.highlight = decal
+        if d.highlight == -1:
+            d.highlight = decal
+            if shift: d.highmode = 1
         elif d.highlight == decal:
-            if d.highmode == 0: d.highmode = 1
+            if not shift:
+                if d.highmode == 0: d.highmode = 1
+                else:
+                    d.highmode = 0
+                    d.highlight = -1
             else:
-                d.highmode = 0
-                d.highlight = -1
+                if d.highmode == 1: d.highmode = 0
+                else:
+                    d.highlight = -1
         else: d.highlight = decal
     
         
@@ -176,3 +193,21 @@ def dropRoom():
         vania.rooms[grabbed].drop()
         grabbed = -1
         grabbing = False
+        
+def debug():
+    print("")
+    snap = gridfunc.snap_to_all(grid.tmouse)
+    d = vanib.decalAt(snap)
+    if not d is None:
+        if d.tid == 0:
+            print("[Decal {}] | Pos {}, Type {}, Offset {} | State {}, Color {} | [Bind {}]".format(d.id, d.pos, d.type, d.offset, d.state, d.color, d.bind))
+        else:
+            print("[Mark {}] | Pos {} | Sign {}, Highlight {} {} | [Bind {}]".format(d.id, d.pos, d.sign, d.highlight, d.highmode, d.bind))
+    if snap[1] == 0:
+        r = vania.roomAt((snap[0][0] + (grid.CELL / 2), snap[0][1] + (grid.CELL / 2)))
+        if not r is None:
+            print("[Room {}] | Pos {}, Size {} | Flags {}{}{}".format(r.id, r.pos, r.size, r.grabbed, r.hovered, r.endangered))
+    else:
+        l = vania.linkAt(snap[0])
+        if not l is None:
+            print("[Link {}] | Edge {}, Pos {} | State {}, Flags {}{}".format(l.id, l.edge, l.pos, l.state, l.hovered, l.endangered))

@@ -101,6 +101,9 @@ def mouseReleased():
                     f.addDecal()
                 if f.checkTool("MARK"):
                     f.addMark(1)
+                if f.checkTool("DEBUG"):
+                    f.debug()
+                    
     if not popup.popping and mouseButton == RIGHT:
         if not f.checkTool("MARK"): doubleRight()
         if not f.checkTool(("BRUSH", "DELETE", "LINK", "PAINT", "MARK")):
@@ -166,8 +169,20 @@ def keyPressed():
         if key == "S": filesys.Save()
         if key == "O": filesys.Open()
 
-    if debugging and key == "0":
-        popup.Pop("Test Popup", "This is a test message\nincluding linebreaks")
+    if debugging:
+        if key == "0": popup.Pop("Test Popup", "This is a test message\nincluding linebreaks")
+        if key == "8":
+            ui.buttons[f.tool].disable()
+            f.setTool(7)
 
     if debugging: debug.key(key)
-    if keyCode == 112: debugging = not debugging  # F1
+    if f.alt and keyCode == 112: debugging = not debugging  # F1
+    
+    if keyCode == SHIFT:   f.shift = True
+    if keyCode == CONTROL: f.ctrl  = True
+    if keyCode == ALT:     f.alt   = True
+    
+def keyReleased():
+    if keyCode == SHIFT:   f.shift = False
+    if keyCode == CONTROL: f.ctrl  = False
+    if keyCode == ALT:     f.alt   = False

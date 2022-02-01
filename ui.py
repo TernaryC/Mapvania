@@ -67,12 +67,29 @@ def draw():
     if decalMenu: drawDrop()
     drawScroll()
     drawButtons()
+    drawTooltip()
+    
+def drawTooltip():
+    noStroke()
+    fill(COLORS['WHITE'])
+    setText(2)
+    tooltips = ["Draw rooms. Right click to delete.",
+                "Draw hallways. Right click to delete. [SHIFT] hidden [CTRL] full-size",
+                "Add keys and color decals. Right click to delete. [SHIFT] small",
+                "Pick up and move rooms.",
+                "Drag to delete elements.",
+                "Drag to pan the screen.",
+                "Add and cycle decals. Right click to reverse.",
+                "Debug"
+               ]
+    text(tooltips[f.tool], 15, height-20)
     
 def drawBorder():
     rect(20, 0, width-20, 80)
     rect(0, 0, 20, height)
     rect(width, 0, -20, height)
     rect(20, height, width-20, -20)
+    rect(20, height, 410, -30)
 
 dropW = 292
 dropH = 55
@@ -87,15 +104,13 @@ def drawDrop():
     rect(20, 86, 6, dropH - 6)
     
 def drawScroll():
-    sizex = map(grid.TRUELEN, grid.LEN * 1.7, grid.LEN * 0.195, 10, width - 40)
+    sizex = map(grid.TRUELEN, grid.LEN * 1.7, grid.LEN * 0.195, 10, width - 450)
     sizey = map(grid.TRUELEN, grid.LEN * 1.7, grid.LEN * 0.195, 10, height - 100)
-    scrollx = map(grid.offset[0], 20, -(grid.TRUELEN - 880), 20 + (sizex / 2), width - 20 - (sizex / 2))
+    scrollx = map(grid.offset[0], 20, -(grid.TRUELEN - 880), 430 + (sizex / 2), width - 20 - (sizex / 2))
     scrolly = map(grid.offset[1], 80, -(grid.TRUELEN - 630), 80 + (sizey / 2), height - 20 - (sizey / 2))
     rectMode(CENTER)
     fill(COLORS['UIBUTT'])
-    #rect(scrollx, 80, sizex, 10)
     rect(scrollx, height - 20, sizex, 10)
-    rect(20, scrolly, 10, sizey)
     rect(width - 20, scrolly, 10, sizey)
     rectMode(CORNER)
     

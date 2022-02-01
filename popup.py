@@ -33,20 +33,19 @@ def Pop(t, m, w=0):
     weight = w 
     
 def Help():
-    message = """Brush Tool: Click and drag to draw rooms. Right click to delete.
-Pencil Tool: Click on edges to add hallways. Right click to delete.
-                      Click again to toggle hallway type.
-Keys Tool: Click to add colored indicators. Right click to delete.
-                   Click again on large keys to change their size.
-                   Click on decals to color them.
-Move Tool: Click and drag to move rooms.
-Delete Tool: Click and drag to delete rooms and hallways in an area.
-Pan Tool: Click and drag to move the camera view.
-Decal Tool: Click to add symbols. Click again to change symbol.
-                     Right click to reverse.
+    message = """Mapvania v.1.0.0
+A map making tool created by Jennifer Zimmerle
+
+Keybindings and colors can be customized by editing the file
+ located at [data/preferences.ini] 
+
+Created using processing.py (https://py.processing.org/)
+
+License information located at:
+(https://github.com/TernaryC/Mapvania)
 """
-# 34-45 is the limit
-    Pop("Mapvania v.1.0.0", message, 1)
+# 36-47 is the limit
+    Pop("Mapvania", message, 1)
 
 def step():
     global centerx
