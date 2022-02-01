@@ -6,7 +6,6 @@ import popup
 savefile = {}
 
 def New():
-    print("New")
     for r in vania.rooms:
         if r is None: continue
         vania.deleteRoom(r.id)
@@ -24,7 +23,6 @@ def New():
     
 def Open(callback=False):
     global savefile
-    
     if not callback:
         selectInput("Open Map...", "OpenStart")
     else:
@@ -74,6 +72,8 @@ def Open(callback=False):
                 vm = vanib.Mark(m["snap"][0], m["bind"], 0)
                 if vm.id != m["id"]: raise IndexError("Mark ID Error")
                 vm.sign = m["sign"]
+                vm.highlight = m["high"][0]
+                vm.highnode  = m["high"][1]
             if MARKS["count"] != len(vanib.marks): raise IndexError("Mark Length Error")
             
             savefile = {}
@@ -140,6 +140,7 @@ def Save():
                 mark["snap"] = m.snap
                 mark["bind"] = m.bind
                 mark["sign"] = m.sign
+                mark["high"] = [m.highlight, m.highmode]
                 file["MARKS"]["list"].append(mark)
         if file["MARKS"]["count"] != len(file["MARKS"]["list"]): raise IndexError("Mark Length Error")
         

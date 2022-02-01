@@ -96,7 +96,7 @@ def drawGrid():
     
     cell = snap_to_grid(tmouse)
     
-    if mouseIn:
+    if mouseIn and f.acceptInput:
         if not f.drawing and not f.deleting:
             noStroke()
             fill(COLORS['CLHIGH'])
@@ -125,4 +125,3 @@ def drawGrid():
             rect(r[0] + 3, r[1] + 3, r[2] - 6, r[3] - 6)
         
     rectMode(CORNER)
-    debug.indicator()

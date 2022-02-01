@@ -25,21 +25,6 @@ def loadImages():
     images.append((loadImage("assets/delete0.png"),  loadImage("assets/delete1.png")))
     images.append((loadImage("assets/pan0.png"),     loadImage("assets/pan1.png")))
     images.append((loadImage("assets/signage0.png"), loadImage("assets/signage1.png")))
-    
-    vanib.SIGNS.append(loadImage("assets/signX.png"))
-    vanib.SIGNS.append(loadImage("assets/signO.png"))
-    vanib.SIGNS.append(loadImage("assets/signQ.png"))
-    vanib.SIGNS.append(loadImage("assets/sign1.png"))
-    vanib.SIGNS.append(loadImage("assets/sign2.png"))
-    vanib.SIGNS.append(loadImage("assets/sign3.png"))
-    vanib.SIGNS.append(loadImage("assets/sign4.png"))
-    vanib.SIGNS.append(loadImage("assets/signUP.png"))
-    vanib.SIGNS.append(loadImage("assets/signLEFT.png"))
-    vanib.SIGNS.append(loadImage("assets/signDOWN.png"))
-    vanib.SIGNS.append(loadImage("assets/signRIGHT.png"))
-    vanib.SIGNS.append(loadImage("assets/signSTAIRS0.png"))
-    vanib.SIGNS.append(loadImage("assets/signSTAIRS1.png"))
-    vanib.SIGNS.append(loadImage("assets/signCHEST.png"))
 
 def setup():
     loadImages()
@@ -180,15 +165,15 @@ class Button():
             self.w = textWidth(self.txt) + 20
         
     def checkHover(self):
+        if self.hovered == 1:
+            self.hoverTime += 1
+        else: self.hoverTime = 0
         self.hovered = 0
+        if not f.acceptInput: return
         hw = self.w / 2
         hh = self.h / 2
         if f.within(mouseX, mouseY, self.x - hw, self.y - hh, self.x + hw, self.y + hh):
             self.hovered = 1 
-            
-        if self.hovered == 1:
-            self.hoverTime += 1
-        else: self.hoverTime = 0
         
     def activate(self):
         self.active = 1
@@ -204,7 +189,7 @@ class Button():
         else:
             if self.txt == "NEW":  filesys.New()
             if self.txt == "SAVE": filesys.Save()
-            if self.txt == "OPEN": filesys.Open()
+            if self.txt == "LOAD": filesys.Open()
             if "?" in self.txt:    Help()
             if self.txt[0] == "g":
                 if self.txt[1:] == "01": grid.config(0)

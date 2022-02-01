@@ -10,6 +10,27 @@ decals = []
 mID = 0
 marks = []
 
+SIGNS = []
+
+def setup():
+    SIGNS.append(loadShape("assets/signage/x.svg"))
+    SIGNS.append(loadShape("assets/signage/o.svg"))
+    SIGNS.append(loadShape("assets/signage/q.svg"))
+    SIGNS.append(loadShape("assets/signage/dot1.svg"))
+    SIGNS.append(loadShape("assets/signage/dot2.svg"))
+    SIGNS.append(loadShape("assets/signage/dot3.svg"))
+    SIGNS.append(loadShape("assets/signage/dot4.svg"))
+    SIGNS.append(loadShape("assets/signage/arrowUP.svg"))
+    SIGNS.append(loadShape("assets/signage/arrowRIGHT.svg"))
+    SIGNS.append(loadShape("assets/signage/arrowDOWN.svg"))
+    SIGNS.append(loadShape("assets/signage/arrowLEFT.svg"))
+    SIGNS.append(loadShape("assets/signage/stairsLEFT.svg"))
+    SIGNS.append(loadShape("assets/signage/stairsRIGHT.svg"))
+    SIGNS.append(loadShape("assets/signage/chest.svg"))
+    
+    for s in SIGNS:
+        s.disableStyle()
+
 def step():
     global ID
     global mID
@@ -103,39 +124,46 @@ class Decal():
                 self.offset[1] += self.pos[1] - vania.rooms[self.bind].pos[1]
     
     def check(self):
-        #print("check")
         c = None
         if not self.bind is None:
             if self.type == 0:
                 if self.bind < len(vania.rooms):
                     c = vania.rooms[self.bind]
                 else:
-                    #print("nbn,0,b>")
                     return False
             else:
                 if self.bind < len(vania.links):
                     c = vania.links[self.bind]
-                    if c.state == 2:
-                        deleteDecal(self.id, self.tid)
-                        c = None
+                    if not c is None:
+                        if c.state == 2:
+                            deleteDecal(self.id, self.tid)
+                            c = None
                 else:
-                    #print("nbn,1,b>")
                     return False
             if c is None: deleteDecal(self.id, self.tid)
-            #print("c")
             return not c is None
         else:
             if self.type == 0:
                 r = vania.roomAt((self.pos[0] + self.offset[0], self.pos[1] + self.offset[1]))
                 if not r is None:
                     deleteDecal(self.id, self.tid)
-                    #print("bn,0,nrn")
                     return False
+                bordering = 0
+                for l in vania.links:
+                    if l is None: continue
+                    sp = gridfunc.snap_to_grid(self.pos)
+                    if l.pos[0] == sp[0] and l.pos[1] == sp[1]:
+                        bordering += 1
+                        continue
+                    if l.pos[2] == sp[0] and l.pos[3] == sp[1]:
+                        bordering += 1
+                if bordering > 0 and bordering % 2 == 0:
+                    deleteDecal(self.id, self.tid)
+                    return False
+                    
             if self.type == 1:
                 deleteDecal(self.id, self.tid)
-                #print("bn,1")
                 return False
-            #print("bn")
             return True
     
     def getCell(self):
@@ -173,6 +201,7 @@ class Decal():
             if l.endangered:
                 col = COLORS['CLMDEC']
                 
+        noStroke()
         fill(col)
         if self.type == 0:
             s = 16
@@ -186,8 +215,6 @@ class Decal():
             rectMode(CENTER)
             rect(p[0], p[1], w, h)
             rectMode(CORNER)
-            
-SIGNS = []
             
 class Mark(Decal):
     def __init__(self, pos, bind, start):
@@ -207,6 +234,8 @@ class Mark(Decal):
         
         self.sign = 0 if start == 1 else len(SIGNS) - 1
         self.state = -1
+        self.highlight = -1
+        self.highmode = 0
         
         self.offset = [grid.CELL / 2, grid.CELL / 2]
         if not bind is None:
@@ -223,7 +252,7 @@ class Mark(Decal):
             return
         
         p = self.pos
-        if not self.bind is None:
+        if not self.bind is None and self.bind <= len(vania.rooms):
             r = vania.rooms[self.bind]
             if r.grabbed:
                 p[0] = grid.tmouse[0] - (r.size[0] / 2)
@@ -231,11 +260,18 @@ class Mark(Decal):
                 p[0] += self.offset[0]
                 p[1] += self.offset[1]
             
-        imageMode(CENTER)
-        if not self.bind is None: tint(eval('0xFF' + COLORS['CLMDEC'][1:]))
-        else: tint(eval('0xFF' + COLORS['CLFILL'][1:]))
-        image(SIGNS[self.sign], p[0], p[1], grid.CELL, grid.CELL)
-        imageMode(CORNER)
+        cols = [-1, COLORS['CLFILL']]
+        if self.highlight != -1: cols[0] = DECAL[self.highlight]
+        if not self.bind is None: cols[1] = COLORS['CLMDEC']
+        shapeMode(CENTER)
+        if self.highlight != -1:
+            noFill()
+            strokeWeight(1) 
+            stroke(cols[self.highmode])
+            shape(SIGNS[self.sign], p[0], p[1], grid.CELL, grid.CELL)
+        noStroke()
+        fill(cols[abs(self.highmode - 1)])
+        shape(SIGNS[self.sign], p[0], p[1], grid.CELL, grid.CELL)
         
         if debug.showId:
             fill(255, 0, 0)

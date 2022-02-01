@@ -20,10 +20,12 @@ def setup():
     ui.setup()
     ui.buttons[0].activate()
     ui.buttons[ui.BC + 1].activate()
+    vanib.setup()
     
 def draw():
     global rightTimer
     
+    if not focused: f.acceptInput = False
     if rightTimer > 0: rightTimer -= 1
     
     rectMode(CORNER)
@@ -41,6 +43,7 @@ def draw():
     vanib.drawDecals(1)
     vania.drawRooms()
     vanib.drawDecals(0)
+    if debugging: debug.indicator()
     pop()
     # Draw UI
     ui.decalMenu = False
@@ -58,11 +61,13 @@ def draw():
             actual = gridfunc.trans_to_real(r.pos)
             scaled = (r.size[0] * grid.rescale, r.size[1] * grid.rescale)
             noFill()
+            strokeWeight(2)
             stroke(255, 0, 255)
+            rectMode(CORNER)
             rect(actual[0], actual[1], scaled[0], scaled[1])
 
 def mousePressed():
-    if mouseButton == LEFT:
+    if f.acceptInput and mouseButton == LEFT:
         f.mouseDown = True
         if not popup.popping and ui.mouseInside():
             if f.checkTool("BRUSH"):
@@ -71,9 +76,10 @@ def mousePressed():
                 f.moveRoom()
             if f.checkTool("DELETE"):
                 f.deleteStart()
+    if focused: f.acceptInput = True
     
 def mouseReleased():
-    if mouseButton == LEFT:
+    if f.mouseDown and mouseButton == LEFT:
         f.mouseDown = False
         if not popup.popping:
             if not ui.mouseInside():
@@ -134,6 +140,7 @@ def OpenStart(f):
         with open(sf, 'r') as fs:
             filesys.savefile = eval(loadStrings(fs)[0])
             filesys.Open(True)
+    f.acceptInput = True
 
 def SaveEnd(f):
     if not f is None:
@@ -142,19 +149,19 @@ def SaveEnd(f):
         with open(sf, 'w') as fs:
             saveStrings(fs, [str(filesys.savefile)])
         filesys.savefile = {}
+    f.acceptInput = True
 
 def keyPressed():
     global debugging
     
     if not popup.popping:
-        if not any((f.shift, f.ctrl, f.alt)):
-            if key == "1" or key in config.KEYS[0]: ui.buttons[0].activate()
-            if key == "2" or key in config.KEYS[1]: ui.buttons[1].activate()
-            if key == "3" or key in config.KEYS[2]: ui.buttons[2].activate()
-            if key == "4" or key in config.KEYS[3]: ui.buttons[3].activate()
-            if key == "5" or key in config.KEYS[4]: ui.buttons[4].activate()
-            if key == "6" or key in config.KEYS[5] or key == " ": ui.buttons[5].activate()
-            if key == "7" or key in config.KEYS[6]: ui.buttons[6].activate()
+        if key == "1" or key in config.KEYS[0]: ui.buttons[0].activate()
+        if key == "2" or key in config.KEYS[1]: ui.buttons[1].activate()
+        if key == "3" or key in config.KEYS[2]: ui.buttons[2].activate()
+        if key == "4" or key in config.KEYS[3]: ui.buttons[3].activate()
+        if key == "5" or key in config.KEYS[4]: ui.buttons[4].activate()
+        if key == "6" or key in config.KEYS[5] or key == " ": ui.buttons[5].activate()
+        if key == "7" or key in config.KEYS[6]: ui.buttons[6].activate()
         if key == "N": filesys.New()
         if key == "S": filesys.Save()
         if key == "O": filesys.Open()
@@ -164,12 +171,3 @@ def keyPressed():
 
     if debugging: debug.key(key)
     if keyCode == 112: debugging = not debugging  # F1
-    
-    if keyCode == SHIFT:   f.shift = True
-    if keyCode == CONTROL: f.ctrl  = True
-    if keyCode == ALT:     f.alt   = True
-    
-def keyReleased():
-    if keyCode == SHIFT:   f.shift = False
-    if keyCode == CONTROL: f.ctrl  = False
-    if keyCode == ALT:     f.alt   = False

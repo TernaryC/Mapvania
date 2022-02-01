@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="50"
+   height="50"
+   viewBox="0 0 13.229166 13.229167"
+   version="1.1"
+   id="svg5"
+   inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20)"
+   sodipodi:docname="chest.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <title
+     id="title1184">signageCHEST</title>
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#61a25d"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="true"
+     inkscape:document-units="mm"
+     showgrid="true"
+     inkscape:zoom="12.286644"
+     inkscape:cx="21.893692"
+     inkscape:cy="24.457452"
+     inkscape:window-width="1817"
+     inkscape:window-height="1051"
+     inkscape:window-x="-9"
+     inkscape:window-y="-9"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1"
+     units="px"
+     width="50px">
+    <inkscape:grid
+       type="xygrid"
+       id="grid21" />
+  </sodipodi:namedview>
+  <defs
+     id="defs2">
+    <inkscape:path-effect
+       effect="powerclip"
+       id="path-effect3232"
+       is_visible="true"
+       lpeversion="1"
+       inverse="true"
+       flatten="false"
+       hide_clip="false"
+       message="Use fill-rule evenodd on &lt;b&gt;fill and stroke&lt;/b&gt; dialog if no flatten result after convert clip to paths." />
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath3224">
+      <g
+         id="g3230"
+         clip-path="none"
+         style="display:none;fill:#000000;fill-opacity:1">
+        <g
+           inkscape:label="Clip"
+           id="g3228"
+           style="fill:#000000;fill-opacity:1">
+          <path
+             style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+             d="M 4.4979166,6.6145832 6.6145832,4.4979166 8.7312499,6.6145832 6.6145832,8.7312499 Z"
+             id="path3226" />
+        </g>
+      </g>
+      <path
+         id="lpe_path-effect3232"
+         style="fill:#000000;fill-opacity:1"
+         class="powerclip"
+         d="M -2.8058384,-2.8058384 H 16.035005 V 16.035005 H -2.8058384 Z M 4.4979166,6.6145832 6.6145832,8.7312499 8.7312499,6.6145832 6.6145832,4.4979166 Z" />
+    </clipPath>
+  </defs>
+  <metadata
+     id="metadata1182">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:title>signageCHEST</dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:groupmode="layer"
+     id="layer2"
+     inkscape:label="Layer 7"
+     style="display:inline" />
+  <g
+     inkscape:groupmode="layer"
+     id="layer1"
+     inkscape:label="Layer 6"
+     style="display:inline">
+    <path
+       style="fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 2.38125,5.0270833 V 9.5249999 L 3.7041666,10.847917 H 9.5249999 L 10.847917,9.5249999 V 5.0270833 l -6.879167,0 -0.5291667,1.5875 5.8208333,-10e-8 1e-7,2.6458335 H 3.96875 l 0,-4.2333334 z"
+       id="path5618"
+       sodipodi:nodetypes="ccccccccccccc" />
+    <path
+       style="fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 2.38125,4.4979166 v -0.79375 L 3.7041666,2.38125 h 5.8208333 l 1.3229171,1.3229166 v 0.79375 z"
+       id="path5884" />
+  </g>
+</svg>

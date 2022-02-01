@@ -23,7 +23,7 @@ def step():
             continue
         r.hovered = False
         r.endangered = False
-        if f.posin(grid.tmouse, r.pos, r.size):
+        if f.posin(grid.tmouse, r.pos, r.size) and f.acceptInput:
             if f.checkTool(("MOVE", "MARK")):
                 r.hovered = True
             if f.checkTool("DELETE"):
@@ -46,7 +46,7 @@ def step():
         l.endangered = False
         m = gridfunc.snap_to_edge(grid.tmouse)
         la = linkAt(m)
-        if not la is None and la.id == l.id:
+        if not la is None and la.id == l.id and f.acceptInput:
             if f.checkTool("LINK"):
                 l.hovered = True
             if f.checkTool("PAINT") and grid.gridVal == 1 and l.state != 2:

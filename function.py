@@ -3,17 +3,14 @@ import gridfunc
 import vania
 import vanib
 
-shift = False 
-ctrl  = False
-alt   = False
-
+acceptInput = True
 mouseDown = False
 
 tool = 0
 decal = 0
 
 drawing = False
-drawStart = [0, 0]
+drawStart = [-1, -1]
 
 grabbing = False
 grabbed = -1
@@ -56,11 +53,14 @@ def startRoom():
     
 def addRoom():
     global drawing
+    global drawStart
     drawing = False
-    
+
+    if drawStart[0] == drawStart[1] == -1: return
     r = getDrawSpan()
     if not vania.roomIn((r[0], r[1]), (r[2], r[3])):
         vania.Room(r)
+    drawStart = [-1, -1]
         
 def addLink():
     cell = gridfunc.snap_to_grid(grid.tmouse)
@@ -88,8 +88,18 @@ def addDecal():
     d = vanib.decalAt(snap)
     if d is None: vanib.Decal(snap, id, color=decal)
     elif d.tid == 0:
-        if d.type == d.state == 0: d.state = 1
-        else: vanib.deleteDecal(d.id)
+        if d.color == decal:
+            if d.type == d.state == 0: d.state = 1
+            else: vanib.deleteDecal(d.id)
+        else: d.color = decal
+    else:
+        if d.highlight == -1: d.highlight = decal
+        elif d.highlight == decal:
+            if d.highmode == 0: d.highmode = 1
+            else:
+                d.highmode = 0
+                d.highlight = -1
+        else: d.highlight = decal
     
         
 def addMark(dir):
@@ -102,11 +112,12 @@ def addMark(dir):
     #print(d)
     if d is None: vanib.Mark(cell, id, dir)
     elif d.tid == 1: d.advance(dir)
+    else: vanib.deleteDecal(d.id)
         
 def deleteDecal():
     snap = gridfunc.snap_to_all(grid.tmouse)
     d = vanib.decalAt(snap)
-    if not d is None: vanib.deleteDecal(d.id)
+    if not d is None: vanib.deleteDecal(d.id, d.tid)
         
 def deleteStart():
     global deleting
@@ -117,8 +128,10 @@ def deleteStart():
         
 def deleteRoom(all=False):
     global deleting
+    global drawStart
     deleting = False
     
+    if drawStart[0] == drawStart[1] == -1: return
     s = getDrawSpan()
     rooms = vania.roomIn((s[0], s[1]), (s[2], s[3]))
     if not rooms is None:
@@ -136,8 +149,9 @@ def deleteRoom(all=False):
                 vanib.deleteDecal(d.id, 0)
         for m in vanib.marks:
             if m is None: continue
-            if gridfunc.overlap(d.pos, (10, 10), (s[0], s[1]), (s[2], s[3])) > 0:
-                vanib.deleteDecal(d.id, 1)
+            if gridfunc.overlap(m.pos, (10, 10), (s[0], s[1]), (s[2], s[3])) > 0:
+                vanib.deleteDecal(m.id, 1)
+    drawStart = [-1, -1]
 
 def deleteLink():
     edge = gridfunc.snap_to_edge(grid.tmouse)

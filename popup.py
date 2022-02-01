@@ -38,6 +38,7 @@ Pencil Tool: Click on edges to add hallways. Right click to delete.
                       Click again to toggle hallway type.
 Keys Tool: Click to add colored indicators. Right click to delete.
                    Click again on large keys to change their size.
+                   Click on decals to color them.
 Move Tool: Click and drag to move rooms.
 Delete Tool: Click and drag to delete rooms and hallways in an area.
 Pan Tool: Click and drag to move the camera view.
