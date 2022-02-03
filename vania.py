@@ -44,6 +44,7 @@ def step():
             continue
         l.hovered = False
         l.endangered = False
+        l.isDrawn = True
         m = gridfunc.snap_to_edge(grid.tmouse)
         la = linkAt(m)
         if not la is None and la.id == l.id and f.acceptInput:
@@ -109,6 +110,7 @@ def drawLinkages():
     cellsChecked = {}
     for l in links:
         if l is None: continue
+        if l.state == 2: continue
         cell = (l.pos[0], l.pos[1])
         if cell in cellsChecked.keys():
             cellsChecked[cell].append(l.id)
@@ -151,15 +153,21 @@ def drawLinkages():
                     
             if not corned:
                 if not -1 in (edges[0], edges[1], edges[2], edges[3]):
+                    left  = links[edges[0]]
+                    up    = links[edges[1]]
+                    right = links[edges[2]]
+                    down  = links[edges[3]]
                     fill(COLORS['CLFILL'])
-                    if all(links[x].state == 1 for x in (edges[1], edges[3])): fill(COLORS['CLFADE'])
-                    rect(links[edges[1]].edge[0], links[edges[1]].edge[1] + 10, 15, 20)
-                    rect(links[edges[3]].edge[0], links[edges[3]].edge[1] - 10, 15, 20)
-                    rect(cell[0] + ch, cell[1] + ch, 15, 15)
+                    if all(x.state == 1 for x in (up, down)): fill(COLORS['CLFADE'])
+                    vw = 15
+                    rect(up.edge[0],   up.edge[1]   + 10, vw, 20)
+                    rect(down.edge[0], down.edge[1] - 10, vw, 20)
+                    rect(cell[0] + ch, cell[1] + ch, vw, 15)
                     fill(COLORS['CLFILL'])
-                    if all(links[x].state == 1 for x in (edges[0], edges[2])): fill(COLORS['CLFADE'])
-                    rect(links[edges[0]].edge[0] + 8, links[edges[0]].edge[1], 16, 15)
-                    rect(links[edges[2]].edge[0] - 8, links[edges[2]].edge[1], 16, 15)
+                    if all(x.state == 1 for x in (left, right)): fill(COLORS['CLFADE'])
+                    hd = 8
+                    rect(left.edge[0]  + hd - 2, left.edge[1],  (hd * 2) + 2, 15)
+                    rect(right.edge[0] - hd + 2, right.edge[1], (hd * 2) + 2, 15)
 
 def deleteRoom(id):
     rooms[id] = None
@@ -187,6 +195,7 @@ class Link():
         
         self.hovered = False
         self.endangered = False
+        self.isDrawn = True
         
         grid = gridfunc.trans_to_grid(cell)
         xo = (-1 if edge[3] == 0 else 1) if edge[2] == 0 else 0
@@ -207,6 +216,7 @@ class Link():
         actual = gridfunc.trans_to_real(self.edge)
         if actual[0] + grid.TRUECELL < 0 or actual[0] > width or actual[1] + grid.TRUECELL < 0 or actual[1] > height:
             return
+        if not self.isDrawn: return
         
         noStroke()
         
